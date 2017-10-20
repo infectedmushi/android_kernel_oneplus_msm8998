@@ -719,7 +719,7 @@ static int qpnp_hap_vmax_config(struct qpnp_hap *hap)
 
 	rc = qpnp_hap_read_reg(hap, &reg, QPNP_HAP_VMAX_REG(hap->base));
 	if (rc < 0)
-		return rc;
+		    return rc;
 	reg &= QPNP_HAP_VMAX_MASK;
 	temp = hap->vmax_mv / QPNP_HAP_VMAX_MIN_MV;
 	reg |= (temp << QPNP_HAP_VMAX_SHIFT);
@@ -1084,9 +1084,9 @@ static ssize_t qpnp_hap_vmax_store(struct device *dev,
 	else if (data > QPNP_HAP_VMAX_MAX_MV)
 		data = QPNP_HAP_VMAX_MAX_MV;
 
-    rc = qpnp_hap_read_reg(hap, &reg, QPNP_HAP_VMAX_REG(hap->base));
-    if(rc < 0)
-        return rc;
+	rc = qpnp_hap_read_reg(hap, &reg, QPNP_HAP_VMAX_REG(hap->base));
+	if (rc < 0)
+		return rc;
 
 	reg &= QPNP_HAP_VMAX_MASK;
 	temp = data / QPNP_HAP_VMAX_MIN_MV;
@@ -1536,10 +1536,7 @@ static void update_lra_frequency(struct qpnp_hap *hap)
 
     lra_init_freq = 200000/temp;
 
-	if ((abs(lra_init_freq-235)*100/235) < 5) {
-        lra_auto_res_lo = lra_auto_res_lo;
-        lra_auto_res_hi = lra_auto_res_hi;
-    }else{
+    if ((abs(lra_init_freq-235)*100/235) >= 5) {
         lra_auto_res_lo = 0x53;
         lra_auto_res_hi = 0x3;
     }
@@ -2364,11 +2361,12 @@ static int qpnp_haptic_probe(struct platform_device *pdev)
 	hap = devm_kzalloc(&pdev->dev, sizeof(*hap), GFP_KERNEL);
 	if (!hap)
 		return -ENOMEM;
-		hap->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-		if (!hap->regmap) {
-			dev_err(&pdev->dev, "Couldn't get parent's regmap\n");
-			return -EINVAL;
-		}
+
+	hap->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+	if (!hap->regmap) {
+		dev_err(&pdev->dev, "Couldn't get parent's regmap\n");
+		return -EINVAL;
+	}
 
 	hap->pdev = pdev;
 
