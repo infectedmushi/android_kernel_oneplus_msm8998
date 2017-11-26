@@ -1254,7 +1254,8 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 		break;
 	}
 
-	// Get key code based on registered gesture.
+	keyCode = UnkownGestrue;
+	// Get key code based on registered gesture
 	switch (gesture) {
 	case GESTURE_DOUBLE_TAP:
 		keyCode = KEY_DOUBLE_TAP;
