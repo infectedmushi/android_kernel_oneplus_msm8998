@@ -388,3 +388,4 @@ module_platform_driver(tristate_dev_driver);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("switch Profiles by this triple key driver");
+
